@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8" />
+	<title>For Neo!</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<!--
+	Script V1.05 2006/01/18 for the game: Red pill
+	Online script : http://all.ovh/script.html
+	R.Métayer : 06 80 24 26 37
+	-->
+	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script src="//dweet.io/client/dweet.io.min.js"></script>
+	<style>
+		body {
+			margin:0;padding:0;
+		}
+		h2 {
+			font:normal bold 20px/15px Lucida Grande, sans-serif;
+			padding: 0 0 0 10px;
+		}
+		.dn {
+			display:none;
+		}
+		.info {
+			text-align:center;
+			font:normal bold 20px/20px Lucida Grande, sans-serif;
+		}
+		.black {
+			background-color: #000;
+			width:100%;
+			margin:0;padding:5px 0 0 0;
+			text-align:center;
+		}
+		textarea {
+			background-color: #000;
+			font:normal bold 15px/15px Lucida Grande, sans-serif;
+			color:#0F0;
+			width:89%;
+			height:225px;
+			padding:5%;margin:0;
+			border-color:#000;
+		}
+		#m {
+			text-align:center;
+			margin:10px 0 0 0;
+		}
+		button {
+			font:normal bold 15px/15px Lucida Grande, sans-serif;
+			padding:1%;
+			width:80%;
+		}
+		#rotate {
+			width:99%;
+		}
+		#anchor {
+			font:normal bold 15px/15px Lucida Grande, sans-serif;
+			text-align:center;
+			font-size:large;
+		}
+		table {
+			font-family: monospace;
+			font-size: 0.9em;
+			margin-top: 1.25em;
+		}
+		table, tr, td {
+			border: thin solid #000;
+			border-collapse: collapse;
+		}
+		#rot13 td {
+			font:normal bold 15px/25px Lucida Grande, sans-serif;
+			background-color: #C1D6FF;
+			padding:1%;
+		}
+		td {
+			padding: 0.2em 1em;
+		}
+		td:nth-child(2) {
+			letter-spacing: 0.1em;
+		}
+		</style>
+</head>
+<body>
+
+<h2>For Neo</h2>
+<div class="black"><textarea id="s" class="dn"></textarea></div>
+<div class="info"><p>Hello, please wait! I connect to Dweet ...</p></div>
+<div id="m" class="dn"><button id="rotate">The Matrix</button></div> 
+<p id="anchor" class="dn"><a href="#rot13">get a clue ?</a></p>
+<table id="result" class="dn"></table>
+
+<script>
+// Feed cleaning function
+function findAndReplace(object, value, replacevalue){
+  for(var x in object){
+    if(typeof object[x] == typeof {}){
+      findAndReplace(object[x], value, replacevalue);
+    }
+    if(object[x] == value){ 
+      object["message"] = replacevalue;
+      // break; // uncomment to stop after first replacement
+    }
+  }
+}
+// Dweet read feed function
+dweetio.get_all_dweets_for("rc2c-jobapplication", function(err, dweets){
+
+    // Dweets is an array of dweets
+    // Dweets feed reverse
+    dweets.reverse();
+		// Dweet out
+    var out = "";
+    for(theDweet in dweets)
+    {
+        var dweet = dweets[theDweet];
+        // Dweet feed cleaning
+        findAndReplace(dweet, "--------------", "\r");
+        findAndReplace(dweet, "utilisez ROT13 après assemblage", "\r");
+        findAndReplace(dweet, "Bon choix pour la pilule. Vous y êtes presque.", "\r");
+        // Dweet output message
+        out += dweet.content.message;
+    }
+    	// Dweet output in html
+		document.getElementById("s").innerHTML = out;
+
+});
+// Rotate function
+$(function () {
+    $('#rotate').click(handleRotate).trigger('click');
+});
+// Manipulate Rot
+function handleRotate(e) {
+    var s = $('#s').val();
+    $('#result').empty();
+    for (var i = 0; i < 26; i++) {
+        var d = rot(s, i);
+        $('#result').append($('<tr id="rot' + i + '">').append($('<td>', {
+            text: i
+        })).append($('<td>', {
+            text: d
+        })));
+    }
+	// Animation Rotate
+	$('#rotate').click(function() {
+  	$('table').show('slow');
+  	$('#anchor').show('slow');
+	});
+}
+// Rot : Encoding / Decoding
+function rot(s, i) {
+    // modified for general rot# from
+    // http://stackoverflow.com/a/617685/987044
+    return s.replace(/[a-zA-Z]/g, function (c) {
+        return String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + i) ? c : c - 26);
+    });
+}
+// Animation timeout
+setTimeout(function() {
+	$('#s').show('slow');
+}, 4000);
+setTimeout(function() {
+	$('.info').hide();
+	$('textarea').focus();
+}, 4050);
+setTimeout(function() {
+	$('#m').show('slow');
+}, 4250);
+</script>
+
+</body>
+</html>
