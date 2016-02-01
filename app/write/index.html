@@ -4,8 +4,8 @@
 		<meta charset="utf-8" />
 		<title>NeoDweet</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<link rel="stylesheet" type="text/css" href="../css/app.css">
-		<script type="text/javascript" src="../js/matrixBg.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/app.min.css">
+		<script type="text/javascript" src="../js/matrixBg.min.js"></script>
 		<script type="text/javascript">MatrixInit('write');</script>
 	</head>
 	<body onLoad="showDweets()">
@@ -23,16 +23,16 @@
 				</div>
 				<details id="rotS" open></details>
 			<footer>
-				<button id="link" onclick="location.href='../read/?t=afw&r=13&p=1'" accesskey="e" class="blink_me">read</button>
 				thing : <input type="text" name="thing" id="thing" value="afw"> 
 				rotate : <input type="text" name="turn" id="turn" value="13"> 
 				<button onclick="reloadDweetSend()" accesskey="d" class="blink_me">reload</button>
+				<button id="link" onclick="location.href='../read/?t=afw&r=13&p=1'" accesskey="e" class="blink_me">read</button>
 			</footer>
 			</section>
 		</main>
 
 	</body>
 	<script type="text/javascript" src="../js/dweet.io.min.js"></script>
-	<script type="text/javascript" src="../js/date.format.js"></script>
+	<script type="text/javascript" src="../js/date.format.min.js"></script>
 </html>
 
