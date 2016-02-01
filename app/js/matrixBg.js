@@ -204,6 +204,7 @@ function handleRotate()
 
 function dweetMessage() {
 		document.getElementById('rotS').innerHTML = "";
+	showDweets();
 		document.getElementById('btnS').style.display = 'none';
 		document.getElementById('sendProgress').style.display = 'block';
 	var addThing = document.getElementById('thing').value;		// add Dweet thing value 
