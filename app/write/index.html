@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>NeoDweet</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="../css/app.css">
+		<script type="text/javascript" src="../js/matrixBg.js"></script>
+		<script type="text/javascript">MatrixInit('write');</script>
+	</head>
+	<body onLoad="showDweets()">
+		<main class="Matrix-mainWrapper">
+			<header>
+				<h1>writeDweet(<span id="title"></span>)</h1>
+			</header> 
+			<section class="details">
+				<textarea id="s" autofocus>Envoyez nous (à l'adresse : emploi-web@rc2c.fr) une adresse de dépôt public GIT à partir de laquelle nous pourrons cloner votre CV, votre lettre de motivation et le script qui vous a servi à assembler cette phrase.</textarea>
+				<button id="btnS" class="blink_me" onclick="dweetMessage()" accesskey="s">
+					send
+				</button>
+				<div id="sendProgress">
+				<div id="sendBar"></div>
+				</div>
+				<details id="rotS" open></details>
+			<footer>
+				<button id="link" onclick="location.href='../read/?t=afw&r=13&p=1'" accesskey="e" class="blink_me">read</button>
+				thing : <input type="text" name="thing" id="thing" value="afw"> 
+				rotate : <input type="text" name="turn" id="turn" value="13"> 
+				<button onclick="reloadDweetSend()" accesskey="d" class="blink_me">reload</button>
+			</footer>
+			</section>
+		</main>
+
+	</body>
+	<script type="text/javascript" src="../js/dweet.io.min.js"></script>
+	<script type="text/javascript" src="../js/date.format.js"></script>
+</html>
+

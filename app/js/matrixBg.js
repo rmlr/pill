@@ -12,10 +12,11 @@ var bodyLoaded = false;
 window.addEventListener("resize", onCanvasResize);
 
 window.onload = function() {
+	if(introParam == 'write' || introParam == 'read') {var dir = '../'} else {var dir = ''}
 	MatrixMainWrapper = document.getElementsByClassName('Matrix-mainWrapper')[0];
 	MatrixMainWrapper.style.display = 'none';
 	var headerInnerStyle = document.createElement('style');
-	headerInnerStyle.appendChild(document.createTextNode('@font-face {font-family: "matrixFont";src: url("fonts/matrix.ttf");}'));
+	headerInnerStyle.appendChild(document.createTextNode('@font-face {font-family: "matrixFont";src: url("' + dir + 'fonts/matrix.ttf");}'));
 	headerInnerStyle.appendChild(document.createTextNode('.Matrix-mainWrapper {position: relative;}'));
 	document.head.appendChild(headerInnerStyle);
 	var matrixMainHolder = document.createElement('div');
@@ -30,23 +31,34 @@ window.onload = function() {
 	matrixMainCanvas.id = 'MatrixCanvas';
 	var matrixMainKeypressAudio = document.createElement('audio');
 	matrixMainKeypressAudio.id = 'MatrixKeypress';
-	matrixMainKeypressAudio.src = 'audio/keypress.mp3';
+	matrixMainKeypressAudio.src = dir + 'audio/keypress.mp3';
 	matrixMainKeypressAudio.setAttribute('preload', 'auto');
 	var MatrixModem = document.createElement('audio');
 	MatrixModem.id = 'MatrixModem';
-	MatrixModem.src = 'audio/modem.mp3';
+	MatrixModem.src = dir + 'audio/modem.mp3';
 	MatrixModem.setAttribute('preload', 'auto');
 	matrixMainHolder.appendChild(matrixMainCanvas);
 	matrixMainHolder.appendChild(matrixMainKeypressAudio);
 	matrixMainHolder.appendChild(MatrixModem);
 	document.body.insertBefore(matrixMainHolder, document.body.firstChild);
-	document.getElementById('rot').innerHTML = "please, push the rotate button or Access key 'r' ! ( <a href='https://en.wikipedia.org/wiki/Access_key' title='Access key on Wikipedia' target='_blank'>hyperlink</a> )";
 	if(introParam == 'yes') {
  		cursorMatrixBG(introParam);
+ 		reloadDweetFor();
+ 	} else if(introParam == 'write') {
+ 		cursorMatrixBG();
+ 		getUrlValue();
+		reloadDweetSend()
+ 	} else if(introParam == 'read') {
+ 		cursorMatrixBG();
+ 		getUrlValue();
+ 		reloadDweetFor();
  	} else {
  		cursorMatrixBG();
+ 		getUrlValue();
+ 		reloadDweetFor();
  	}
- 		getDweetFor();
+	
+
  };
 
  function MatrixInit(intro)
@@ -129,8 +141,8 @@ function drawMatrixBG()
 	for(var i = 0; i < letterPos.length; i++)
 	{
 		var text = letters[Math.floor(Math.random()*letters.length)];
-		prev.push(text);
-		ctx.fillText(text, i*fontSize, letterPos[i]*fontSize);
+			prev.push(text);
+			ctx.fillText(text, i*fontSize, letterPos[i]*fontSize);
 
 		if(letterPos[i]*fontSize > canvas.height && Math.random() > 0.945){
 			letterPos[i] = 0;
@@ -151,11 +163,11 @@ function drawMatrixBG()
 
 function getDweetFor()
 {
-document.getElementById('s').innerHTML = "";
+	document.getElementById('s').innerHTML = "";
 var addThing = document.getElementById('thing').value;
-document.getElementById('title').innerHTML = addThing;
+	document.getElementById('title').innerHTML = addThing;
  	// Dweet read thing function
-dweetio.get_all_dweets_for(addThing, function(err, dweets){
+	dweetio.get_all_dweets_for(addThing, function(err, dweets){
 
     // Dweets is an array of dweets
     // Dweets thing reverse
@@ -165,36 +177,102 @@ dweetio.get_all_dweets_for(addThing, function(err, dweets){
     for(theDweet in dweets)
     {
         var dweet = dweets[theDweet];
-        // Dweet thing cleaning
-        findAndReplace(dweet, "--------------", "\r");
-        findAndReplace(dweet, "utilisez ROT13 après assemblage", "\r");
-        findAndReplace(dweet, "Bon choix pour la pilule. Vous y êtes presque.", "\r");
-        // Dweet output message
-        out += dweet.content.message;
+	        // Dweet thing cleaning
+	        findAndReplace(dweet, "--------------", "\r");
+	        findAndReplace(dweet, "utilisez ROT13 après assemblage", "\r");
+	        findAndReplace(dweet, "Bon choix pour la pilule. Vous y êtes presque.", "\r");
+	        // Dweet output message
+	        out += dweet.content.message;
     }
     	// Dweet output in html
     	var put = out.replace(/undefined/gi, "");
-		document.getElementById('s').innerHTML = put;
-		document.getElementById('btn').style.display = 'block';
-});
+			document.getElementById('s').innerHTML = put;
+			document.getElementById('btnR').style.display = 'block';
+	});
 }
 
 function handleRotate() 
 {	
 	var numberRotate = +document.getElementById('turn').value;
 	var s = null;
-	s = document.getElementById('s').value;
+		s = document.getElementById('s').value;
     var rt = rot(s, numberRotate);
     var wr = rt.replace(/(\r\n|\n|\r)/gm,'<br>');
     var seq = wr.replace(/Qngr qr yn fédhrapr/gi, "Date de la séquence");
-	document.getElementById('rot').innerHTML = seq;
+		document.getElementById('rotR').innerHTML = seq;
 } 
+
+function dweetMessage() {
+		document.getElementById('rotS').innerHTML = "";
+		document.getElementById('btnS').style.display = 'none';
+		document.getElementById('sendProgress').style.display = 'block';
+	var addThing = document.getElementById('thing').value;		// add Dweet thing value 
+	var numberRotate = +document.getElementById('turn').value; 	// add rotate number
+	var s = null;
+		s = document.getElementById('s').value;					// add message textarea
+    	s = s.replace(/(\r\n|\n|\r)/gm,'');						// line break replace
+    var rt = rot(s, numberRotate);								// rotate function
+
+/*	Array : 
+		1) add lines, date, number of rotate, text after rotate and text of array end.
+		2) array concatenation.
+*/
+	var na = ["--------------"];								// 
+		na.push("Date de la séquence " + dateString );
+		na.push("--------------");
+		na.push("utilisez ROT" + numberRotate + " après assemblage");
+	var nb = rt.split("");
+		nb.push("--------------");
+		nb.push("Bon choix pour la pilule. Vous y êtes presque.");
+	var m = na.concat(nb);
+
+/*	Send Dweet : 
+		1) setting the number of loops.
+		2) time delay setting to send.
+		3) send to Dweet function.
+*/
+	var prog_bar = document.getElementById('sendBar');
+	var width = 0;
+	var send = m.length * 10;
+	var id = setInterval(frame, send);
+		function frame() {
+		if (width == 100) {
+			clearInterval(id);
+		} else {
+			width++; 
+			prog_bar.style.width = width + '%'; 
+		}
+		}
+	for (var i = 0; i < m.length; i++) {
+	setTimeout(function(x) { return function() {
+		dweetio.dweet_for(addThing, {message:m[x]}, function(err, dweet){
+
+        console.log(dweet.thing); 	// The thing of the dweet
+        console.log(dweet.content); // The content of the dweet
+        console.log(dweet.created); // The create date of the dweet
+
+		}); //sending dweet code ends here
+    if (x + 1 == m.length) {
+		document.getElementById('sendProgress').style.display = 'none';
+		document.getElementById('btnS').style.display = 'block';
+    }
+    }; }(i), 1000*i);
+	}
+}
+function showDweets() {
+	var addThing = document.getElementById('thing').value;		// add Dweet thing value 
+		document.getElementById('title').innerHTML = addThing;
+		dweetio.listen_for(addThing, function(dweet){
+		console.log(dweet);
+		document.getElementById('rotS').innerHTML += dweet.content.message;  
+  });
+}
 
 function typeOut(str, startX, startY, lineHeight, padding) {
     var cursorX = startX || 0;
     var cursorY = startY || 0;
     var lineHeight = lineHeight || 32;
-    padding = padding || 10;
+	    padding = padding || 10;
     var i = 0;
     $_inter = setInterval(function() {
         var w = ctx.measureText(str.charAt(i)).width;
@@ -245,6 +323,35 @@ function onCanvasResize() {
 		bodyLoaded = true;
 	}
 }
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+function getUrlValue() 
+{
+ 	getUrlVars();
+	var test = getUrlVars()["t"];
+	if(test == 'undefined') {
+ 	var th = "rc2c-jobapplication";
+ 	var ro = "13";
+ 		document.getElementById("thing").value = th;
+ 		document.getElementById("turn").value = ro;
+	} else {
+ 	var th = getUrlVars()["t"];
+ 	var ro = getUrlVars()["r"];
+ 		document.getElementById("thing").value = th;
+ 		document.getElementById("turn").value = ro;
+	}
+}	
 // thing cleaning function
 function findAndReplace(object, value, replacevalue){
   for(var x in object){
@@ -265,9 +372,41 @@ function rot(s, i) {
         return String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + i) ? c : c - 26);
     });
 }
+function addUrlParam(url, key, value) {
+    var newParam = key+"="+value;
+    var result = url.replace(new RegExp("(&|\\?)"+key+"=[^\&|#]*"), '$1' + newParam);
+    if (result === url) { 
+        result = (url.indexOf("?") != -1 ? url.split("?")[0]+"?"+newParam+"&"+url.split("?")[1] 
+           : (url.indexOf("#") != -1 ? url.split("#")[0]+"?"+newParam+"#"+ url.split("#")[1] 
+              : url+'?'+newParam));
+    }
+    return result;
+}
 function reloadDweetFor()
 {
-	document.getElementById('rot').innerHTML = "";
-	document.getElementById('rot').innerHTML = "please, push the rotate button or Access key 'r' ! ( <a href='https://en.wikipedia.org/wiki/Access_key' title='Access key on Wikipedia' target='_blank'>hyperlink</a> )";
-	getDweetFor();
+	var txr = "<br>hello, concerning readDweet<br>push the rotate button or Access key 'r'<br>push the write button or Access key 'e'<br>push the reload button after modify thing or Access key 'd'";
+	var akw = "<br>use Access key ( <a href='https://en.wikipedia.org/wiki/Access_key' title='Access key on Wikipedia' target='_blank'>hyperlink</a> )";
+	var addThing = document.getElementById('thing').value;
+	var numberRotate = +document.getElementById('turn').value;
+		document.getElementById('rotR').innerHTML = null;
+		document.getElementById('rotR').innerHTML =  txr + akw;
+	if(introParam == 'yes') {var dir = ''} else {var dir = '../'}
+	var url = "location.href='"+dir+"write/?r=" + numberRotate + "&p=1'";
+		link.setAttribute('onclick', addUrlParam(url, "t", addThing));
+		getDweetFor();
+}
+function reloadDweetSend()
+{
+	var txw = "<br>hello, concerning writeDweet<br>push the send button or Access key 's'<br>push the read button or Access key 'e'<br>push the reload button after modify thing or Access key 'd'";
+	var akw = "<br>use Access key ( <a href='https://en.wikipedia.org/wiki/Access_key' title='Access key on Wikipedia' target='_blank'>hyperlink</a> )";
+	var addThing = document.getElementById('thing').value;
+	var numberRotate = +document.getElementById('turn').value;
+		document.getElementById('title').innerHTML = addThing;
+		document.getElementById('rotS').innerHTML = null;
+		document.getElementById('rotS').innerHTML =  txw + akw;
+	if(introParam == 'yes') {var dir = ''} else {var dir = '../'}
+	var url = "location.href='"+dir+"read/?r=" + numberRotate + "&p=1'";
+		link.setAttribute('onclick', addUrlParam(url, "t", addThing));
+		document.getElementById('sendProgress').style.display = 'none';
+		document.getElementById('btnS').style.display = 'block';
 }
