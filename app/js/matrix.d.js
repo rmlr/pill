@@ -47,7 +47,7 @@ window.onload = function() {
  	} else if(introParam == 'write') {
  		cursorMatrixBG();
  		getUrlValue();
-		reloadDweetSend()
+		reloadDweetSend();
  	} else if(introParam == 'read') {
  		cursorMatrixBG();
  		getUrlValue();
@@ -57,8 +57,6 @@ window.onload = function() {
  		getUrlValue();
  		reloadDweetFor();
  	}
-	
-
  };
 
  function MatrixInit(intro)
@@ -389,6 +387,7 @@ function reloadDweetFor()
 	var akw = "<br>use Access key ( <a href='https://en.wikipedia.org/wiki/Access_key' title='Access key on Wikipedia' target='_blank'>hyperlink</a> )";
 	var addThing = document.getElementById('thing').value;
 	var numberRotate = +document.getElementById('turn').value;
+		document.getElementById('title').innerHTML = addThing;
 		document.getElementById('rotR').innerHTML = null;
 		document.getElementById('rotR').innerHTML =  txr + akw;
 	if(introParam == 'yes') {var dir = ''} else {var dir = '../'}
