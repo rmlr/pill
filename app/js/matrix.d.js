@@ -88,7 +88,7 @@ function cursorMatrixBG(introNeeded)
 	var loadIntro = introNeeded || 'no';
 	if(loadIntro == 'yes')
 	{
-		var animText = new Array("$ root login:", "_", "rc2c", "$ root password:", "***","$ calling, please wait...", " OK", "$ entering the matrix, welcome.");
+		var animText = new Array("$ root login:", "_", "neo", "$ root password:", "***","$ calling, please wait...", " OK", "$ entering the matrix, welcome.");
 		soundKeypress = document.getElementById('MatrixKeypress');
 		soundModem = document.getElementById('MatrixModem');
 		ctx.font = fontSize + "px arial";
@@ -340,7 +340,7 @@ function getUrlValue()
  	getUrlVars();
 	var test = getUrlVars()["t"];
 	if(test == 'undefined') {
- 	var th = "rc2c-jobapplication";
+ 	var th = "neo";
  	var ro = "13";
  		document.getElementById("thing").value = th;
  		document.getElementById("turn").value = ro;
