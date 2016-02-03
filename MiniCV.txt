@@ -1,4 +1,4 @@
-// MiniCV V1 2006/00/03
+// MiniCV V1 2006/02/03
 // Thank you to use the attached script!
 // Online: http://all.ovh/app/
 
