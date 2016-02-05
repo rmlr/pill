@@ -202,6 +202,8 @@ function handleRotate()
 } 
 
 function dweetMessage() {
+		today = new Date();
+	var dateString = today.format("dd-mm-yyyy HH:MM");
 		document.getElementById('rotS').innerHTML = "";
 	showDweets();
 		document.getElementById('btnS').style.display = 'none';
