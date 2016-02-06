@@ -258,6 +258,8 @@ function dweetMessage() {
     if (x + 1 == m.length) {
 		document.getElementById('sendProgress').style.display = 'none';
 		document.getElementById('btnS').style.display = 'block';
+		dweetio.stop_listening_for(addThing);
+		reloadDweetSend();
     }
     }; }(i), 1000*i);
 	}
