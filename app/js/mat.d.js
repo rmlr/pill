@@ -250,9 +250,9 @@ function dweetMessage() {
 	setTimeout(function(x) { return function() {
 		dweetio.dweet_for(addThing, {message:m[x]}, function(err, dweet){
 
-        console.log(dweet.thing); 	// The thing of the dweet
-        console.log(dweet.content); // The content of the dweet
-        console.log(dweet.created); // The create date of the dweet
+//        console.log(dweet.thing); 	// The thing of the dweet
+//        console.log(dweet.content); // The content of the dweet
+//        console.log(dweet.created); // The create date of the dweet
 
 		}); //sending dweet code ends here
     if (x + 1 == m.length) {
@@ -268,7 +268,7 @@ function showDweets() {
 	var addThing = document.getElementById('thing').value;		// add Dweet thing value 
 		document.getElementById('title').innerHTML = addThing;
 		dweetio.listen_for(addThing, function(dweet){
-		console.log(dweet);
+//		console.log(dweet);
 		document.getElementById('rotS').innerHTML += dweet.content.message;  
   });
 }
