@@ -243,7 +243,7 @@ function dweetMessage() {
 */
 	var prog_bar = document.getElementById('sendBar');
 	var width = 0;
-	var send = m.length * 10;
+	var send = m.length * 15;
 	var id = setInterval(frame, send);
 		function frame() {
 		if (width == 100) {
@@ -268,7 +268,7 @@ function dweetMessage() {
 		dweetio.stop_listening_for(addThing);
 		reloadDweetSend();
     }
-    }; }(i), 1000*i);
+    }; }(i), 1500*i);
 	}
 }
 function showDweets() {
