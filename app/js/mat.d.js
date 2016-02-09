@@ -220,17 +220,21 @@ function dweetMessage() {
 		2) array concatenation.
 */
 	var na = [];
-		na.push("--------------");								// 
+//		na.push("--------------");								// 
 		na.push("Date de la séquence " + dateString );
-		na.push("--------------");
+//		na.push("--------------");
 		na.push("utilisez ROT" + numberRotate + " après assemblage");
 // modify for new Dweet feed
-		na.push(rt);
-		na.push("Bon choix pour la pilule. Vous y êtes presque.");
+	var nb = [];
+	for (var i = 0, charsLength = rt.length; i < charsLength; i += 100) {
+    		nb.push(rt.substring(i, i + 100));
+	}
+//		na.push(rt);
+//		na.push("Bon choix pour la pilule. Vous y êtes presque.");
 //	var nb = rt.split("");
 //		nb.push("--------------");
-//		nb.push("Bon choix pour la pilule. Vous y êtes presque.");
-//	var m = na.concat(nb);
+		nb.push("Bon choix pour la pilule. Vous y êtes presque.");
+	var m = na.concat(nb);
 
 /*	Send Dweet : 
 		1) setting the number of loops.
@@ -239,7 +243,7 @@ function dweetMessage() {
 */
 	var prog_bar = document.getElementById('sendBar');
 	var width = 0;
-	var send = na.length * 10;
+	var send = m.length * 10;
 	var id = setInterval(frame, send);
 		function frame() {
 		if (width == 100) {
@@ -249,16 +253,16 @@ function dweetMessage() {
 			prog_bar.style.width = width + '%'; 
 		}
 		}
-	for (var i = 0; i < na.length; i++) {
+	for (var i = 0; i < m.length; i++) {
 	setTimeout(function(x) { return function() {
-		dweetio.dweet_for(addThing, {message:na[x]}, function(err, dweet){
+		dweetio.dweet_for(addThing, {message:m[x]}, function(err, dweet){
 
 //        console.log(dweet.thing); 	// The thing of the dweet
 //        console.log(dweet.content); // The content of the dweet
 //        console.log(dweet.created); // The create date of the dweet
 
 		}); //sending dweet code ends here
-    if (x + 1 == na.length) {
+    if (x + 1 == m.length) {
 		document.getElementById('sendProgress').style.display = 'none';
 		document.getElementById('btnS').style.display = 'block';
 		dweetio.stop_listening_for(addThing);
